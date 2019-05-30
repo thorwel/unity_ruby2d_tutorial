@@ -8,15 +8,17 @@ public class CogController : MonoBehaviour
     Rigidbody2D rigidbody2d;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (transform.position.magnitude > 50.0f)
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void Launch(Vector2 direction, float force)
@@ -26,8 +28,12 @@ public class CogController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        //we also add a debug log to know what the projectile touch
-        Debug.Log("Projectile Collision with " + other.gameObject);
+        EnemyController e = other.collider.GetComponent<EnemyController>();
+        if (e != null)
+        {
+            e.Fix();
+        }
+
         Destroy(gameObject);
     }
 
